@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: custom\n"
-"POT-Creation-Date: 2015-08-21 00:27+0100\n"
-"PO-Revision-Date: 2015-08-21 00:32+0100\n"
+"POT-Creation-Date: 2015-09-21 00:05+0100\n"
+"PO-Revision-Date: 2015-09-21 00:17+0100\n"
 "Last-Translator: sun <daniel@netzstrategen.com>\n"
 "Language-Team: netzstrategen\n"
 "Language: de_DE\n"
@@ -22,41 +22,112 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: bower_components\n"
 "X-Poedit-SearchPathExcluded-2: node_modules\n"
 
-#: src/GravityForms/NewsletterOptIn.php:96
-msgid "Newsletter Sign-up"
-msgstr "Newsletter-Anmeldung"
-
-#: src/GravityForms/SubscriptionTrialSignup.php:117
-msgid ""
-"The provided email address does not appear to be valid.  Please verify it "
-"and try again."
-msgstr ""
-"Die eingegebene E-Mail-Adresse scheint nicht gültig zu sein.  Bitte "
-"verifizieren Sie sie und versuchen Sie es erneut."
-
-#: src/GravityForms/SubscriptionTrialSignup.php:120
-msgid ""
-"We're sorry, there seems to be a system error currently.  Please try again "
-"later."
-msgstr ""
-"Entschuldigung, aktuell scheint ein Systemfehler vorzuliegen.  Bitte "
-"versuchen Sie es später noch einmal."
-
-#: src/GravityForms/SubscriptionTrialSignup.php:123
+#: src/Admin.php:38
 #, php-format
-msgid "Error: %d %s"
-msgstr "Fehler: %d %s"
+msgid "%s › DoubleClick For Publishers (DFP) Advertisements"
+msgstr "%s › DoubleClick For Publishers (DFP) Anzeigen"
 
-#: src/GravityForms/SubscriptionTrialSignup.php:124
-msgid "In case this error persists, please contact us directly."
+#: src/Admin.php:38
+msgid "Settings"
 msgstr ""
-"Falls dieser Fehler bestehen bleiben sollte, kontaktieren Sie uns bitte."
 
-#~ msgid "Products per page"
-#~ msgstr "Produkte pro Seite"
+#: src/Admin.php:38
+msgid "Advertisements (DFP)"
+msgstr "Anzeigen (DFP)"
 
-#~ msgid "all"
-#~ msgstr "alle"
+#: src/Admin.php:46
+msgid "Providers"
+msgstr "Vermarkter"
 
-#~ msgid "%d per page"
-#~ msgstr "%d pro Seite"
+#: src/Admin.php:47
+msgid "Google DFP accounts"
+msgstr "Google DFP-Konten"
+
+#: src/Admin.php:81
+msgid "ID"
+msgstr ""
+
+#: src/Admin.php:88
+msgid "Label"
+msgstr ""
+
+#: src/Admin.php:91
+msgid "Ad unit prefix"
+msgstr "Anzeigenblock-Präfix"
+
+#: src/Admin.php:95
+msgid "Premium account"
+msgstr "Premium-Konto"
+
+#: src/Format.php:61
+msgid "Superbanner/Leaderboard"
+msgstr ""
+
+#: src/Format.php:68
+msgid "Skyscraper"
+msgstr ""
+
+#: src/Format.php:80
+msgid "Megabanner/Billboard"
+msgstr ""
+
+#: src/Format.php:87
+msgid "Any Rectangle"
+msgstr "Jeder Rectangle"
+
+#: src/Format.php:94
+msgid "Medium Rectangle"
+msgstr ""
+
+#: src/Format.php:101
+msgid "Bottom"
+msgstr ""
+
+#: src/Term.php:63 src/Term.php:75
+msgid "Associated DFP Ad Unit"
+msgstr "Zugehöriger DFP Anzeigenblock"
+
+#: src/Term.php:104
+msgid "- None -"
+msgstr "- Keine -"
+
+#: src/Term.php:147
+msgid "DFP Ad Unit"
+msgstr "DFP Anzeigenblock"
+
+#: src/Widget.php:23
+msgid "Advertisement (DFP)"
+msgstr "Anzeige (DFP)"
+
+#: src/Widget.php:24
+msgid ""
+"Placeholder for an advertisement delivered via DoubleClick For Publishers "
+"(DFP)."
+msgstr ""
+"Platzhalter für eine Anzeige, die über DoubleClick For Publishers (DFP) "
+"ausgespielt wird."
+
+#: src/Widget.php:53
+msgid "Provider:"
+msgstr "Vermarkter:"
+
+#: src/Widget.php:55
+msgid "- Default -"
+msgstr "- Standard -"
+
+#: src/Widget.php:63
+msgid "Format:"
+msgstr "Format:"
+
+#: src/Widget.php:73
+#, php-format
+msgid "Output \"%s\" marker"
+msgstr "\"%s\"-Kennzeichnung ausgeben"
+
+#: src/Widget.php:73 templates/dfp-adslot.php:4
+msgid "Advertisement"
+msgstr "Anzeige"
+
+#: src/Widget.php:78
+msgid "Only load when visible"
+msgstr "Nur laden wenn sichtbar"

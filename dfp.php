@@ -7,7 +7,7 @@
   Text Domain: dfp
   Description: Google DFP Ad Server integration.
   Author: Daniel F. Kudwien (sun)
-  Author URI: http://www.netzstrategen.com
+  Author URI: http://www.netzstrategen.com/sind/daniel-kudwien
   License: GPL-2.0+
   License URI: http://www.gnu.org/licenses/gpl-2.0
 */
@@ -37,6 +37,8 @@ register_activation_hook(__FILE__, __NAMESPACE__ . '\Schema::activate');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\Schema::deactivate');
 register_uninstall_hook(__FILE__, __NAMESPACE__ . '\Schema::uninstall');
 
+add_action('plugins_loaded', __NAMESPACE__ . '\Plugin::loadTextdomain');
 add_action('init', __NAMESPACE__ . '\Plugin::init');
-add_action('admin_init', __NAMESPACE__ . '\Admin::init');
 add_action('widgets_init', __NAMESPACE__ . '\Widget::init');
+add_action('admin_menu', __NAMESPACE__ . '\Admin::menu');
+add_action('admin_init', __NAMESPACE__ . '\Admin::init');

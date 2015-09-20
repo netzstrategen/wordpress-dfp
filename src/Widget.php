@@ -14,14 +14,17 @@ class Widget extends \WP_Widget {
 
   /**
    * @implements widgets_init
+   *
+   * register_widget() directly instantiates the given class, so this file will
+   * be loaded on all pages anyway.
    */
   public static function init() {
     register_widget(__CLASS__);
   }
 
   public function __construct() {
-    parent::__construct('dfp', __('DFP Ad', Plugin::L10N), [
-      'description' => __('An ad slot for DFP.', Plugin::L10N),
+    parent::__construct('dfp', __('Advertisement (DFP)', Plugin::L10N), [
+      'description' => __('Placeholder for an advertisement delivered via DoubleClick For Publishers (DFP).', Plugin::L10N),
     ]);
   }
 
@@ -29,9 +32,9 @@ class Widget extends \WP_Widget {
    * Front-end display of widget.
    */
   public function widget($args, $instance) {
-    echo $args['before_widget'];
-    AdSlot::createFromWidget($instance)->render();
-    echo $args['after_widget'];
+    //echo $args['before_widget'];
+    AdSlot::show($instance['format'], $instance['marker'], $instance['provider'] ?: NULL);
+    //echo $args['after_widget'];
   }
 
   /**
@@ -40,24 +43,21 @@ class Widget extends \WP_Widget {
   public function form($instance) {
     $instance += [
       'provider' => NULL,
-      'size' => '',
+      'format' => '',
       'marker' => TRUE,
-      'lazyload' => FALSE,
+      //'lazyload' => FALSE,
     ];
-    $formats = [
-      'superbanner',
-      'skyscraper',
-      'billboard',
-      'mediumrectangle',
-      'bottom',
-    ];
+    $providers = Provider::getAll();
+    $provider_disabled = count($providers) == 1 ? ' disabled' : '';
+    $formats = Format::getAll();
     ?>
 
 <p>
   <label for="<?= $this->get_field_id('provider') ?>"><?= __('Provider:', Plugin::L10N) ?></label>
-  <select name="<?= $this->get_field_name('provider') ?>" id="<?= $this->get_field_id('provider') ?>">
-<?php foreach (Provider::getAll() as $provider): ?>
-    <option value="<?= esc_attr($provider->getId()) ?>"><?= $provider->getLabel() ?></option>
+  <select name="<?= $this->get_field_name('provider') ?>" id="<?= $this->get_field_id('provider') ?>"<?= $provider_disabled ?>>
+    <option value=""><?= __('- Default -', Plugin::L10N) ?></option>
+<?php foreach ($providers as $provider): ?>
+    <option value="<?= esc_attr($provider->getId()) ?>"<?= $provider->getId() === $instance['provider'] ? ' selected' : '' ?>><?= $provider->getLabel() ?></option>
 <?php endforeach; ?>
   </select>
 </p>
@@ -65,8 +65,8 @@ class Widget extends \WP_Widget {
 <p>
   <label for="<?= $this->get_field_id('format') ?>"><?= __('Format:', Plugin::L10N) ?></label>
   <select name="<?= $this->get_field_name('format') ?>" id="<?= $this->get_field_id('format') ?>">
-<?php foreach ($formats as $value): ?>
-    <option value="<?= esc_attr($value) ?>"><?= esc_html($value) ?></option>
+<?php foreach ($formats as $name => $format): ?>
+    <option value="<?= esc_attr($name) ?>"<?= $name === $instance['format'] ? ' selected' : '' ?>><?= esc_html($format->getLabel()) ?></option>
 <?php endforeach; ?>
   </select>
 </p>
@@ -77,7 +77,7 @@ class Widget extends \WP_Widget {
 </p>
 
 <!--p>
-  <input type="checkbox" name="<?= $this->get_field_name('lazyload') ?>" value="1"<?= $instance['lazyload'] ? ' checked' : '' ?>>
+  <input type="checkbox" name="<?= $this->get_field_name('lazyload') ?>" value="1"<?= !empty($instance['lazyload']) ? ' checked' : '' ?>>
   <label><?= __('Only load when visible', Plugin::L10N) ?></label>
 </p-->
 <?php
@@ -88,9 +88,10 @@ class Widget extends \WP_Widget {
    */
   public function update($new_instance, $old_instance) {
     $instance = array();
-    $instance['provider'] = $new_instance['provider'];
+    $instance['provider'] = (int) $new_instance['provider'];
     $instance['format'] = $new_instance['format'];
-    $instance['lazyload'] = (bool) $new_instance['lazyload'];
+    $instance['marker'] = (bool) $new_instance['marker'];
+    //$instance['lazyload'] = (bool) $new_instance['lazyload'];
     return $instance;
   }
 

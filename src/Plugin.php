@@ -28,14 +28,19 @@ class Plugin {
    * @implements init
    */
   public static function init() {
-    static::loadTextdomain();
+    if (is_admin()) {
+      return;
+    }
+    add_action('wp_head', __NAMESPACE__ . '\CurrentPage::wp_head', 100);
+    add_action('dfp_adslot', __NAMESPACE__ . '\AdSlot::show', 0, 2);
+    add_action('wp_footer', __NAMESPACE__ . '\CurrentPage::wp_footer', 100);
   }
 
   /**
    * Loads the plugin textdomain.
    */
   public static function loadTextdomain() {
-    load_plugin_textdomain(self::L10N, FALSE, self::L10N . '/languages/');
+    load_plugin_textdomain(static::L10N, FALSE, static::L10N . '/languages/');
   }
 
   /**
@@ -44,10 +49,10 @@ class Plugin {
    * Uses plugins_url() instead of plugin_dir_url() to avoid a trailing slash.
    */
   public static function getBaseUrl() {
-    if (!isset(self::$baseUrl)) {
-      self::$baseUrl = plugins_url('', self::getBasePath() . '/dfp.php');
+    if (!isset(static::$baseUrl)) {
+      static::$baseUrl = plugins_url('', static::getBasePath() . '/dfp.php');
     }
-    return self::$baseUrl;
+    return static::$baseUrl;
   }
 
   /**
