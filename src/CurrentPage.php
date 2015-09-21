@@ -143,9 +143,9 @@ googletag.cmd.push(function () {
     }
     elseif (is_single()) {
       // @todo Traverse through parent pages.
-      if (is_hierarchical()) {
-        
-      }
+//      if (is_hierarchical()) {
+//        
+//      }
     }
 //    $placementId = FALSE;
 //    elseif (is_category() || is_single()) {
