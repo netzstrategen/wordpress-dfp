@@ -100,11 +100,11 @@ class Term {
 ?>
   <div>
     <?= esc_html($provider->getLabel()) ?>:
-    <select name="dfp[adunit][<?= $provider->getId() ?>]" id="term-dfp-adunit">
+    <select name="dfp[adunit][<?= $provider->getId() ?>]" data-dfp-provider="<?= $provider->getId() ?>">
       <option value=""><?= __('- None -', Plugin::L10N) ?></option>
-  <?php foreach ($options as $value): ?>
+<?php foreach ($options as $value): ?>
       <option value="<?= esc_attr($value) ?>"<?= $value === $selected ? ' selected' : '' ?>><?= esc_html($value) ?></option>
-  <?php endforeach; ?>
+<?php endforeach; ?>
     </select>
   </div>
 <?php
@@ -155,13 +155,40 @@ class Term {
     if ($column_name === 'dfp-adunit') {
       $term = get_term($term_id, $_REQUEST['taxonomy']);
       // @todo Inherit ad unit of parent term.
-      foreach (Provider::getAll() as $provider) {
+      $providers = Provider::getAll();
+      $provider_count = count($providers);
+      foreach ($providers as $provider) {
         if ($unit = static::getAdUnit($term, $provider)) {
-          $content .= '<div>' . esc_html($provider->getLabel()) . ': ' . $unit . '</div>';
+          $content .= '<div data-dfp-provider="' . $provider->getId() . '" data-dfp-unit="' . esc_attr($unit) . '">';
+          if ($provider_count > 1) {
+            $content .= esc_html($provider->getLabel()) . ': ';
+          }
+          $content .= esc_html($unit) . '</div>';
         }
       }
     }
     return $content;
+  }
+
+  /**
+   * @implements quick_edit_custom_box
+   */
+  public static function quick_edit_custom_box($column_name, $screen_name, $taxonomy_name) {
+    if ($column_name !== 'dfp-adunit') {
+      return FALSE;
+    }
+?>
+  <fieldset>
+    <div class="inline-edit-col">
+      <label>
+        <span class="title" style="width: 10em;"><?= __('DFP Ad Unit', Plugin::L10N) ?></span>
+        <span class="input-text-wrap" style="overflow: hidden;">
+          <?php static::outputFormSelectElement($taxonomy_name); ?>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+<?php
   }
 
 }

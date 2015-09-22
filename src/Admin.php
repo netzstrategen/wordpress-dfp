@@ -29,6 +29,8 @@ class Admin {
       add_filter("manage_edit-{$taxonomy_name}_columns", __NAMESPACE__ . '\Term::tableColumns');
       add_filter("manage_{$taxonomy_name}_custom_column", __NAMESPACE__ . '\Term::tableColumn', 10, 3);
     }
+    add_action('admin_enqueue_scripts', __CLASS__ . '::admin_enqueue_scripts');
+    add_action('quick_edit_custom_box', __NAMESPACE__ . '\Term::quick_edit_custom_box', 10, 3);
   }
 
   /**
@@ -115,6 +117,17 @@ class Admin {
       $provider['is_premium'] = !empty($provider['is_premium']);
     }
     return $input;
+  }
+
+  /**
+   * @implements admin_enqueue_scripts
+   */
+  public static function admin_enqueue_scripts() {
+    global $pagenow;
+
+    if ($pagenow === 'edit-tags.php' && isset($_GET['taxonomy']) && !isset($_REQUEST['action'])) {
+      wp_enqueue_script('dfp.admin', Plugin::getBaseUrl() . '/js/dfp.admin.js', ['jquery-core', 'inline-edit-tax']);
+    }
   }
 
 }
