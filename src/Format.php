@@ -86,23 +86,14 @@ class Format {
       'rectangle' => [
         'label' => __('Any Rectangle', Plugin::L10N),
         'sizes' => [[300,100], [300,250], [300,600]],
-        'size_mappings' => [
-          [[300 + 2*10,100], [[300,600],[300,250],[300,100]]],
-        ],
       ],
       'mediumrectangle' => [
         'label' => __('Medium Rectangle', Plugin::L10N),
         'sizes' => [[300,250]],
-        'size_mappings' => [
-          [[300 + 2*10,250], [[300,600],[300,250]]],
-        ],
       ],
       'bottom' => [
         'label' => __('Bottom', Plugin::L10N),
         'sizes' => [[300,300]],
-        'size_mappings' => [
-          [[300 + 2*10,300], [[300,300]]],
-        ],
       ],
     ];
     foreach ($formats as &$format) {
@@ -112,6 +103,9 @@ class Format {
         // mappings with higher priority. By defining no suitable sizes for "any"
         // dimension ([0,0]), no ad will be suitable/rendered.
         $format['size_mappings'][] = [[0,0], []];
+      }
+      else {
+        $format['size_mappings'] = [];
       }
     }
     return $formats;
