@@ -71,9 +71,10 @@ class Provider {
   }
 
   public static function getAll() {
-    $providers = get_option('dfp_providers', []);
-    foreach ($providers as &$provider) {
-      $provider = new static($provider['id'], $provider['label'], $provider['adunit_prefix'], $provider['is_premium']);
+    $options = get_option('dfp_providers', []);
+    $providers = [];
+    foreach ($options as $option) {
+      $providers[$option['id']] = new static($option['id'], $option['label'], $option['adunit_prefix'], $option['is_premium']);
     }
     return $providers;
   }

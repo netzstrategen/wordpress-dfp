@@ -48,7 +48,7 @@ class Widget extends \WP_Widget {
       //'lazyload' => FALSE,
     ];
     $providers = Provider::getAll();
-    $provider_disabled = count($providers) == 1 ? ' disabled' : '';
+    $provider_disabled = count($providers) < 2 ? ' disabled' : '';
     $formats = Format::getAll();
     ?>
 

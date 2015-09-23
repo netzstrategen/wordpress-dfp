@@ -47,14 +47,24 @@ class CurrentPage {
   }
 
   public static function renderJS() {
+    $unit = static::getZoneName();
+    if (!$providers = Provider::getAll()) {
+      // No providers.
+      return '';
+    }
+    $default_provider = reset($providers);
+    // @todo Support multiple providers.
+    // @todo Decide: Same units for every provider? Provider-specific units must
+    //   be negotiated in determineZoneName() already & will conflict with filter(s)
+    //   for default/fallback units.
+    //$unit = $unit[$default_provider->getId()];
+
     $slots = static::getRenderedAdSlots();
     $script = '<script type="text/javascript">
 var googletag = googletag || {};
 googletag.cmd = googletag.cmd || [];
 googletag.cmd.push(function () {
 ';
-    $unit = static::getZoneName();
-    $default_provider = Provider::getAll()[0];
     foreach ($slots as $slot) {
       $provider = $slot->getProvider() ?: $default_provider;
       $slot_unit = $provider->getAdUnitPrefix() . $unit;
@@ -75,7 +85,7 @@ googletag.cmd.push(function () {
 ';
     // Allow plugins and theme to append further commands.
     ob_start();
-    do_action('dfp_script_append', $unit, $slots, $script);
+    do_action('dfp/script_append', $unit, $slots, $script);
     $script .= ob_get_clean();
 
     $script .= '  googletag.enableServices();
@@ -116,6 +126,8 @@ googletag.cmd.push(function () {
   }
 
   public static function determineZoneName() {
+    global $wp_query;
+
     if (is_admin() || is_network_admin()) {
       return FALSE;
     }
@@ -127,54 +139,33 @@ googletag.cmd.push(function () {
       // the user visits the "blog" page (chronological listing of all posts).
       return 'news'; // @todo Valid name?
     }
-    elseif (preg_match('@^/test/@', $_SERVER['REQUEST_URI'])) {
+    // If the current URL ends with /test in any way, let's test.
+    if (preg_match('@[/\?]test/?$@', $_SERVER['REQUEST_URI'])) {
       return 'test';
     }
-    elseif (is_category()) {
-      $cat_id = get_query_var('cat');
-      if ($ad_unit = Term::getAdUnit($cat_id)) {
+    if (is_category() || is_tag()) {
+      $term = $wp_query->get_queried_object();
+      if ($ad_unit = Term::getAdUnit($term)) {
         return $ad_unit;
       }
       // @todo Traverse through parent categories.
-      return $ad_unit;
     }
-    elseif (is_tag()) {
-      
-    }
-    elseif (is_single()) {
-      // @todo Traverse through parent pages.
-//      if (is_hierarchical()) {
-//        
-//      }
-    }
-//    $placementId = FALSE;
-//    elseif (is_category() || is_single()) {
-//      $categoryId = static::getCurrentCategoryId();
-//      $placementId = DFP_Model_Mapping::getInstance()->getPlacementIdForCategory($categoryId);
-//    }
-//    else {
-//      $pageId = url_to_postid($_SERVER['REQUEST_URI']);
-//      $placementId = DFP_Model_Mapping::getInstance()->getPlacementIdForPage(!empty($pageId) ? $pageId : 0);
-//    }
-//    if ($placementId == 0) {
-//      $placementId = FALSE;
-//    }
-//    return $placementId;
-  }
-
-  private static function getCurrentCategoryId() {
-    if (isset(static::$currentCategoryId)) {
-      return static::$currentCategoryId;
-    }
-    $catId = get_query_var('cat');
-    if (!$catId) {
+    if (is_single()) {
       $categories = wp_get_post_categories($GLOBALS['post']->ID);
-      if (isset($categories[0])) {
-        $catId = $categories[0];
+      foreach ($categories as $term_id) {
+        $term = get_term($term_id, 'category');
+        if ($ad_unit = Term::getAdUnit($term)) {
+          return $ad_unit;
+        }
+        // @todo Traverse through parent categories.
       }
     }
-    static::$currentCategoryId = $catId ? $catId : FALSE;
-    return static::$currentCategoryId;
+    // @todo Events?
+    // @todo Galleries?
+    elseif (is_page()) {
+      // @todo Traverse through parent pages.
+    }
+    return apply_filters('dfp/zone_default', 'other');
   }
 
 }

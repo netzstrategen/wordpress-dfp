@@ -16,10 +16,15 @@ class Term {
 
   public static function getAdUnit($term, Provider $provider = NULL) {
     $term_units = static::getAdUnits($term);
+    // If a specific provider was requested, return (only) its unit.
     if ($provider) {
       return isset($term_units[$provider->getId()]) ? $term_units[$provider->getId()] : NULL;
     }
-    return $term_units;
+    // Otherwise, fall back to default provider.
+    $providers = Provider::getAll();
+    if (FALSE !== $provider = reset($providers)) {
+      return isset($term_units[$provider->getId()]) ? $term_units[$provider->getId()] : NULL;
+    }
   }
 
   public static function setAdUnit($term, Provider $provider, $unit) {
@@ -35,6 +40,16 @@ class Term {
     }
     else {
       unset(static::$all_units[$term->taxonomy][$term->term_id]);
+    }
+    // Try to clean up orphan leafs.
+    if (isset($provider) && empty(static::$all_units[$term->taxonomy][$term->term_id][$provider->getId()])) {
+      unset(static::$all_units[$term->taxonomy][$term->term_id][$provider->getId()]);
+    }
+    if (empty(static::$all_units[$term->taxonomy][$term->term_id])) {
+      unset(static::$all_units[$term->taxonomy][$term->term_id]);
+    }
+    if (empty(static::$all_units[$term->taxonomy])) {
+      unset(static::$all_units[$term->taxonomy]);
     }
     update_option('dfp_term_units', static::$all_units);
   }
@@ -87,11 +102,7 @@ class Term {
    *   (optional) The term object being edited.
    */
   public static function outputFormSelectElement($taxonomy_name, $term = NULL) {
-    $options = [
-      'homepage',
-      'sonstiges',
-      'test',
-    ];
+    $options = AdUnit::getAll();
     foreach (Provider::getAll() as $provider):
       $selected = NULL;
       if ($term) {
