@@ -25,6 +25,11 @@ class CurrentPage {
   private static $renderedAdSlots = [];
 
   /**
+   * @var array
+   */
+  private static $targeting = [];
+
+  /**
    * @implements wp_head
    * @see \Netzstrategen\Dfp\Plugin::wp_footer()
    */
@@ -80,6 +85,12 @@ googletag.cmd.push(function () {
       }
       $script .= "    .addService(googletag.pubads());\n";
     }
+    $targeting = static::getTargeting();
+    $script .= "  googletag.pubads()";
+    foreach ($targeting as $key => $value) {
+      $script .= "\n    .setTargeting('$key', " . json_encode($value) . ")";
+    }
+    $script .= ";\n";
     $script .= '  googletag.pubads().enableSingleRequest();
   googletag.pubads().collapseEmptyDivs();
 ';
@@ -141,16 +152,26 @@ googletag.cmd.push(function () {
     }
     // If the current URL ends with /test in any way, let's test.
     if (preg_match('@[/\?]test/?$@', $_SERVER['REQUEST_URI'])) {
+      static::setTargeting('entity_type', 'test');
+      static::setTargeting('entity_slug', 'test');
+      static::setTargeting('post_type', 'test');
       return 'test';
     }
     if (is_category() || is_tag()) {
       $term = $wp_query->get_queried_object();
+      static::setTargeting('entity_type', 'term');
+      static::setTargeting('entity_slug', $term->slug);
+      static::setTargeting('entity_id', $term->term_id);
       if ($ad_unit = Term::getAdUnit($term)) {
         return $ad_unit;
       }
       // @todo Traverse through parent categories.
     }
     if (is_single()) {
+      static::setTargeting('entity_type', 'post');
+      static::setTargeting('entity_slug', $GLOBALS['post']->post_name);
+      static::setTargeting('entity_id', $GLOBALS['post']->ID);
+      static::setTargeting('post_type', $GLOBALS['post']->post_type);
       $categories = wp_get_post_categories($GLOBALS['post']->ID);
       foreach ($categories as $term_id) {
         $term = get_term($term_id, 'category');
@@ -163,9 +184,34 @@ googletag.cmd.push(function () {
     // @todo Events?
     // @todo Galleries?
     elseif (is_page()) {
+      static::setTargeting('entity_type', 'post');
+      static::setTargeting('entity_slug', $GLOBALS['post']->post_name);
+      static::setTargeting('entity_id', $GLOBALS['post']->ID);
+      static::setTargeting('post_type', $GLOBALS['post']->post_type);
       // @todo Traverse through parent pages.
     }
     return apply_filters('dfp/zone_default', 'other');
+  }
+
+  /**
+   * Sets a key/value pair for page-level targeting.
+   *
+   * @param string $key
+   *   The targeting key to set. Must not contain spaces.
+   * @param string $value
+   *   The value to set for the key.
+   */
+  public static function setTargeting($key, $value) {
+    static::$targeting[$key] = $value;
+  }
+
+  /**
+   * Returns all key/value pairs that have been set for page-level targeting.
+   *
+   * @return array
+   */
+  public static function getTargeting() {
+    return static::$targeting;
   }
 
 }
