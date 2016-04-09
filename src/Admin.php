@@ -20,7 +20,7 @@ class Admin {
 
     add_action('created_term', __NAMESPACE__ . '\Term::onSave', 10, 3);
     add_action('edited_term', __NAMESPACE__ . '\Term::onSave', 10, 3);
-    add_action('delete_term', __NAMESPACE__ . '\Term::onDelete', 10, 3);
+    add_action('delete_term', __NAMESPACE__ . '\Term::onDelete', 10, 4);
 
     $taxonomies = get_taxonomies('', 'names');
     foreach ($taxonomies as $taxonomy_name) {
