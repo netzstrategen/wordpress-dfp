@@ -48,7 +48,7 @@ class AdUnit {
 
   public static function getAll() {
     $units = static::getDefaults();
-    apply_filters('dfp/units', $units);
+    $units = apply_filters('dfp/units', $units);
     return $units;
   }
 
