@@ -96,6 +96,7 @@ class Format {
         'sizes' => [[300,300]],
       ],
     ];
+    $formats = apply_filters('dfp/format_defaults', $formats);
     foreach ($formats as &$format) {
       if (!empty($format['size_mappings'])) {
         // The last size mapping has the lowest priority and thus applies if the
