@@ -184,8 +184,8 @@ class Term {
   /**
    * @implements quick_edit_custom_box
    */
-  public static function quick_edit_custom_box($column_name, $screen_name, $taxonomy_name) {
-    if ($column_name !== 'dfp-adunit') {
+  public static function quick_edit_custom_box($column_name, $screen_name, $taxonomy_name = NULL) {
+    if ($screen_name !== 'edit-tags' || $column_name !== 'dfp-adunit') {
       return FALSE;
     }
 ?>
