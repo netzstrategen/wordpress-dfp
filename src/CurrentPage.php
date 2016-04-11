@@ -92,6 +92,7 @@ googletag.cmd.push(function () {
     }
     $script .= ";\n";
     $script .= '  googletag.pubads().enableSingleRequest();
+  googletag.pubads().enableSyncRendering();
   googletag.pubads().collapseEmptyDivs();
 ';
     // Allow plugins and theme to append further commands.
@@ -138,6 +139,8 @@ googletag.cmd.push(function () {
 
   public static function determineZoneName() {
     global $wp_query;
+
+    static::setTargeting('lang', 'fr');
 
     if (is_admin() || is_network_admin()) {
       return FALSE;

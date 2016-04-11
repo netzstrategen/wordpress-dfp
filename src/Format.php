@@ -58,10 +58,13 @@ class Format {
     $container_width = 960;
     $formats = [
       'superbanner' => [
-        'label' => __('Superbanner/Leaderboard', Plugin::L10N),
-        'sizes' => [[728,90]],
+        'label' => __('Rossel/Large Leaderboard', Plugin::L10N),
+        'sizes' => [[728,90], [840,150], [840,250], [970,250], [995,123]],
         'size_mappings' => [
-          [[728 + 2*10,90], [728,90]],
+          [[995 + 2*10,90], [[728,90], [840,150], [840,250], [970,250], [995,123]]],
+          [[970 + 2*10,90], [[728,90], [840,150], [840,250], [970,250]]],
+          [[800 + 2*10,90], [[728,90], [840,150], [840,250]]],
+          [[728 + 2*10,90], [[728,90]]],
         ],
       ],
       'skyscraper' => [
@@ -77,23 +80,23 @@ class Format {
         ],
       ],
       'billboard' => [
-        'label' => __('Megabanner/Billboard', Plugin::L10N),
-        'sizes' => [[800,250]],
+        'label' => __('Regional/Leaderboard', Plugin::L10N),
+        'sizes' => [[780,150]],
         'size_mappings' => [
-          [[800 + 2*10,250], [[800,250]]],
+          [[780 + 2*10,150], [[780,150]]],
         ],
       ],
       'rectangle' => [
-        'label' => __('Any Rectangle', Plugin::L10N),
+        'label' => __('Half-Page, Rectangle',Plugin::L10N),
         'sizes' => [[300,100], [300,250], [300,600]],
       ],
       'mediumrectangle' => [
-        'label' => __('Medium Rectangle', Plugin::L10N),
+        'label' => __('Rectangle', Plugin::L10N),
         'sizes' => [[300,250]],
       ],
       'bottom' => [
         'label' => __('Bottom', Plugin::L10N),
-        'sizes' => [[300,300]],
+        'sizes' => [[300,1050]],
       ],
     ];
     $formats = apply_filters('dfp/format_defaults', $formats);
