@@ -35,7 +35,7 @@ class AdSlot {
   /**
    * @var int[]
    */
-  private static $formatCounter = [];
+  protected static $formatCounter = [];
 
   /**
    * Renders an ad slot.

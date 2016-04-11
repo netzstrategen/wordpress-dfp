@@ -98,9 +98,15 @@ class Format {
         'label' => __('Bottom', Plugin::L10N),
         'sizes' => [[300,1050]],
       ],
+      'outofpage' => [
+        'label' => __('Out of Page', Plugin::L10N),
+      ],
     ];
     $formats = apply_filters('dfp/format_defaults', $formats);
     foreach ($formats as &$format) {
+      if (!isset($format['sizes'])) {
+        $format['sizes'] = [];
+      }
       if (!empty($format['size_mappings'])) {
         // The last size mapping has the lowest priority and thus applies if the
         // available screen dimensions are smaller than the earlier defined

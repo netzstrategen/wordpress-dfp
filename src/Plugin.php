@@ -34,6 +34,7 @@ class Plugin {
     add_action('wp_head', __NAMESPACE__ . '\CurrentPage::wp_head', 100);
     add_action('dfp_adslot', __NAMESPACE__ . '\AdSlot::show', 0, 2);
     add_action('wp_footer', __NAMESPACE__ . '\CurrentPage::wp_footer', 100);
+    add_action('get_header', __NAMESPACE__ . '\CurrentPage::get_header');
   }
 
   /**

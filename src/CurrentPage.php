@@ -51,6 +51,13 @@ class CurrentPage {
     echo $output;
   }
 
+  /**
+   * @implements get_header
+   */
+  public static function get_header() {
+    OutOfPageAdSlot::showOutOfPage();
+  }
+
   public static function renderJS() {
     $unit = static::getZoneName();
     if (!$providers = Provider::getAll()) {
@@ -79,7 +86,8 @@ googletag.cmd.push(function () {
       $slot_unit = '/' . $provider->getId() . '/' . $slot_unit;
       $sizes = $slot->getFormat()->getSizes();
       $html_id = $slot->getId();
-      $script .= "  googletag.defineSlot('$slot_unit', " . json_encode($sizes) . ", '$html_id')\n";
+      $defineMethod = $slot instanceof OutOfPageAdSlot ? 'defineOutOfPageSlot' : 'defineSlot';
+      $script .= "  googletag.$defineMethod('$slot_unit', " . json_encode($sizes) . ", '$html_id')\n";
       if ($slot->getFormat()->hasSizeMappings()) {
         $script .= "    .defineSizeMapping(" . json_encode($slot->getFormat()->getSizeMappings()) . ")\n";
       }
