@@ -78,6 +78,7 @@ googletag.cmd = googletag.cmd || [];
 googletag.cmd.push(function () {
 ';
     foreach ($slots as $slot) {
+      $defineMethod = $slot instanceof OutOfPageAdSlot ? 'defineOutOfPageSlot' : 'defineSlot';
       $provider = $slot->getProvider() ?: $default_provider;
       $slot_unit = $provider->getAdUnitPrefix() . $unit;
       if (!$provider->isPremium()) {
@@ -85,9 +86,9 @@ googletag.cmd.push(function () {
       }
       $slot_unit = '/' . $provider->getId() . '/' . $slot_unit;
       $sizes = $slot->getFormat()->getSizes();
+      $sizes = $sizes ? json_encode($sizes) . ', ' : '';
       $html_id = $slot->getId();
-      $defineMethod = $slot instanceof OutOfPageAdSlot ? 'defineOutOfPageSlot' : 'defineSlot';
-      $script .= "  googletag.$defineMethod('$slot_unit', " . json_encode($sizes) . ", '$html_id')\n";
+      $script .= "  googletag.$defineMethod('$slot_unit', " . $sizes . "'$html_id')\n";
       if ($slot->getFormat()->hasSizeMappings()) {
         $script .= "    .defineSizeMapping(" . json_encode($slot->getFormat()->getSizeMappings()) . ")\n";
       }
