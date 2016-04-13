@@ -44,7 +44,7 @@ class CurrentPage {
    */
   public static function wp_footer() {
     $output = ob_get_clean();
-    $script = '<script async type="text/javascript" src="//www.googletagservices.com/tag/js/gpt.js"></script>
+    $script = '<script type="text/javascript" src="//www.googletagservices.com/tag/js/gpt.js"></script>
 ';
     $script .= static::renderJS();
     $output = str_replace('<!--DFP-PLACEHOLDER-SCRIPT-->', $script, $output);
