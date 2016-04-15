@@ -33,6 +33,11 @@ class AdSlot {
   private $provider;
 
   /**
+   * @var string
+   */
+  private $customTargeting;
+
+  /**
    * @var int[]
    */
   protected static $formatCounter = [];
@@ -50,12 +55,12 @@ class AdSlot {
    * @return \Netzstrategen\Dfp\AdSlot
    *   The ad slot instance, after it has been output.
    */
-  public static function show($format, $marker = FALSE, $provider = NULL) {
+  public static function show($format, $marker = FALSE, $provider = NULL, $customTargeting = NULL) {
     $format = Format::createFromDefault($format);
     if (isset($provider)) {
       $provider = Provider::getById($provider) ?: NULL;
     }
-    $instance = new static($format, $marker, $provider);
+    $instance = new static($format, $marker, $provider, $customTargeting);
     $instance->render();
     return $instance;
   }
@@ -69,11 +74,14 @@ class AdSlot {
    *   Whether to include an "Advertisement" text marker.
    * @param \Netzstrategen\Dfp\Provider $provider
    *   (optional) The provider to explicitly use for the ad slot.
+   * @param string $customTargeting
+   *   (optional) The custom target name for the ad slot.
    */
-  public function __construct(Format $format, $marker = FALSE, Provider $provider = NULL) {
+  public function __construct(Format $format, $marker = FALSE, Provider $provider = NULL, $customTargeting = NULL) {
     $this->format = $format;
     $this->marker = (bool) $marker;
     $this->provider = $provider;
+    $this->customTargeting = $customTargeting;
   }
 
   /**
@@ -95,6 +103,10 @@ class AdSlot {
     return $this->provider;
   }
 
+  public function getCustomTargeting() {
+    return $this->customTargeting;
+  }
+
   /**
    * Renders this ad slot.
    */
@@ -110,6 +122,7 @@ class AdSlot {
       'id' => $this->id,
       'format' => $format_name,
       'marker' => $this->marker,
+      'customTargeting' => $this->customTargeting,
     ];
     Plugin::renderTemplate(['templates/dfp-adslot.php'], $variables);
   }

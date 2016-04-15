@@ -33,7 +33,7 @@ class Widget extends \WP_Widget {
    */
   public function widget($args, $instance) {
     //echo $args['before_widget'];
-    AdSlot::show($instance['format'], $instance['marker'], $instance['provider'] ?: NULL);
+    AdSlot::show($instance['format'], $instance['marker'], $instance['provider'] ?: NULL, $instance['customTargeting'] ?: NULL);
     //echo $args['after_widget'];
   }
 
@@ -45,6 +45,7 @@ class Widget extends \WP_Widget {
       'provider' => NULL,
       'format' => '',
       'marker' => TRUE,
+      'customTargeting' => '',
       //'lazyload' => FALSE,
     ];
     $providers = Provider::getAll();
@@ -72,6 +73,11 @@ class Widget extends \WP_Widget {
 </p>
 
 <p>
+  <label for="<?= $this->get_field_id('customTargeting') ?>"><?= __('Targeting: "custom":', Plugin::L10N) ?></label>
+  <input type="text" name="<?= $this->get_field_name('customTargeting') ?>" value="<?= $instance['customTargeting'] ? : '' ?>" id="<?= $this->get_field_id('customTargeting') ?>">
+</p>
+
+<p>
   <input type="checkbox" name="<?= $this->get_field_name('marker') ?>" value="1"<?= $instance['marker'] ? ' checked' : '' ?> id="<?= $this->get_field_id('marker') ?>">
   <label for="<?= $this->get_field_id('marker') ?>"><?= sprintf(__('Output "%s" marker', Plugin::L10N), __('Advertisement', Plugin::L10N)) ?></label>
 </p>
@@ -91,6 +97,7 @@ class Widget extends \WP_Widget {
     $instance['provider'] = (int) $new_instance['provider'];
     $instance['format'] = $new_instance['format'];
     $instance['marker'] = (bool) $new_instance['marker'];
+    $instance['customTargeting'] = $new_instance['customTargeting'];
     //$instance['lazyload'] = (bool) $new_instance['lazyload'];
     return $instance;
   }

@@ -92,6 +92,9 @@ googletag.cmd.push(function () {
       if ($slot->getFormat()->hasSizeMappings()) {
         $script .= "    .defineSizeMapping(" . json_encode($slot->getFormat()->getSizeMappings()) . ")\n";
       }
+      if ($customTargeting = $slot->getCustomTargeting()) {
+        $script .= "\n    .setTargeting('custom', " . $customTargeting . ")";
+      }
       $script .= "    .addService(googletag.pubads());\n";
     }
     $targeting = static::getTargeting();
