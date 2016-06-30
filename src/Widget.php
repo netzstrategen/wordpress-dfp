@@ -73,7 +73,7 @@ class Widget extends \WP_Widget {
 </p>
 
 <p>
-  <label for="<?= $this->get_field_id('customTargeting') ?>"><?= __('Targeting: "custom":', Plugin::L10N) ?></label>
+  <label for="<?= $this->get_field_id('customTargeting') ?>"><?= __('Targeting: "position":', Plugin::L10N) ?></label>
   <input type="text" name="<?= $this->get_field_name('customTargeting') ?>" value="<?= $instance['customTargeting'] ? : '' ?>" id="<?= $this->get_field_id('customTargeting') ?>">
 </p>
 
