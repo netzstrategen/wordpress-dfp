@@ -93,7 +93,7 @@ googletag.cmd.push(function () {
         $script .= "    .defineSizeMapping(" . json_encode($slot->getFormat()->getSizeMappings()) . ")\n";
       }
       if ($customTargeting = $slot->getCustomTargeting()) {
-        $script .= "\n    .setTargeting('position', " . $customTargeting . ")";
+        $script .= "    .setTargeting('position', '" . $customTargeting . "')\n";
       }
       $script .= "    .addService(googletag.pubads());\n";
     }
