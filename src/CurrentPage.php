@@ -143,6 +143,7 @@ googletag.cmd.push(function () {
   public static function getZoneName() {
     if (!isset(static::$zoneName)) {
       static::$zoneName = static::determineZoneName();
+      static::$zoneName = apply_filters('dfp/zone', static::$zoneName);
     }
     if (static::$zoneName !== FALSE) {
       return static::$zoneName;
