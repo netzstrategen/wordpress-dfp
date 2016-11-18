@@ -102,6 +102,10 @@ class Format {
       'outofpage' => [
         'label' => __('Out of Page', Plugin::L10N),
       ],
+      'fluid' => [
+        'label' => __('Rossel/Fluid', Plugin::L10N),
+        'sizes' => 'fluid',
+      ]
     ];
     $formats = apply_filters('dfp/format_defaults', $formats);
     foreach ($formats as &$format) {
