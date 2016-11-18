@@ -122,7 +122,7 @@ class Format {
     return $formats;
   }
 
-  public function __construct($name, $label, array $sizes, array $size_mappings = NULL) {
+  public function __construct($name, $label, $sizes, array $size_mappings = NULL) {
     $this->name = $name;
     $this->label = $label;
     $this->sizes = $sizes;
