@@ -3,7 +3,7 @@
 /*
   Plugin Name: DFP
   Plugin URI: https://wordpress.org/plugins/dfp
-  Version: 1.0.0
+  Version: 1.1.0
   Text Domain: dfp
   Description: Google DFP Ad Server integration.
   Author: Daniel F. Kudwien (sun)

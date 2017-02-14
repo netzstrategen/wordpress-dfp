@@ -192,10 +192,14 @@ googletag.cmd.push(function () {
       foreach ($categories as $term_id) {
         $term = get_term($term_id, 'category');
         if ($ad_unit = Term::getAdUnit($term)) {
-          return $ad_unit;
+          break;
         }
         // @todo Traverse through parent categories.
       }
+      if (!$ad_unit) {
+        $ad_unit = 'other';
+      }
+      return apply_filters('dfp/zone/single', $ad_unit, $GLOBALS['post'], $categories);
     }
     // @todo Events?
     // @todo Galleries?
