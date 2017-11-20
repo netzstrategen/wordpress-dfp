@@ -196,7 +196,7 @@ googletag.cmd.push(function () {
         }
         // @todo Traverse through parent categories.
       }
-      if (!$ad_unit) {
+      if (empty($ad_unit)) {
         $ad_unit = 'other';
       }
       return apply_filters('dfp/zone/single', $ad_unit, $GLOBALS['post'], $categories);
